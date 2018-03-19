@@ -9,7 +9,7 @@ exports.run = (client, message, [mention, ...reason]) => {
     if (message.mentions.members.size === 0)
         return message.reply("Please mention a user to kick");
 
-    if (!message.guild.me.hasPermission("KICK_MEMBERS"))
+    if (!message.guild.me.hasPermission("KICK_MEMBERS") && (message.user.id == congif.owner) )
         return message.reply("");
 
     const kickMember = message.mentions.members.first();

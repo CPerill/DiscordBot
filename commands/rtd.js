@@ -9,27 +9,34 @@ exports.run = (client, message, args) => {
         let rolls = args[1].replace(/\D/g, '');
         let results = [];
 
-        if (rolls != null) {
-            for (let i = 1; i <= rolls; i++) {
-                results.push(Math.floor((Math.random() * dice) + 1));
+        if (rolls != null ) {
+            if(rolls <= 15) {
+                for (let i = 1; i <= rolls; i++) {
+                    results.push(Math.floor((Math.random() * dice) + 1));
+                }
+                console.log(results);
             }
-            console.log(results);
         } else {
             results.push(Math.floor((Math.random() * dice) + 1));
         }
 
 
         if (dice == 4 || dice == 6 || dice == 8 || dice == 12 || dice == 20) {
-            if (rolls == 1) {
-                message.channel.send(`Ok, from rolling one d${dice} just the once I got ${results[0]}`);
+            if(rolls <= 12) {
+                if (rolls == 1) {
+                    message.channel.send(`Ok, from rolling one d${dice} just the once I got ${results[0]}`);
+                } else {
+                    message.channel.send(`Ok, from rolling one d${dice}, ${rolls} times I got the following\n`);
+                    let count = 1;
+                    results.forEach(function (result) {
+                        message.channel.send(`Roll ${count}:\t${result}`);
+                        count++;
+                    });
+                }
             } else {
-                message.channel.send(`Ok, from rolling one d${dice}, ${rolls} times I got the following\n`);
-                let count = 1;
-                results.forEach(function (result) {
-                    message.channel.send(`Roll ${count}:\t${result}`);
-                    count++;
-                });
+                message.reply("Too high ye cint ye");
             }
+            
         } else {
             message.channel.send("That is not a valid choice. Pick a d4, d6, d8, d12, or d20");
         }
