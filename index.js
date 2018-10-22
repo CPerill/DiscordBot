@@ -1,39 +1,20 @@
-const Discord = require("discord.js");
+const Discord = require('discord.js');
 const client = new Discord.Client();
+const { prefix, token } = require('./config.json');
+// const fs = require('fs');
+// const ffmpeg = require('ffmpeg');
 
-const fs = require("fs");
-const ffmpeg = require('ffmpeg');
-
-const config = require("./config.json");
-
-const prefix = config.prefix;
-
-// This loop reads the /events/ folder and attaches each event file to the appropriate event.
-fs.readdir("./events/", (err, files) => {
-    if (err) return console.error(err);
-    files.forEach(file => {
-        let eventFunction = require(`./events/${file}`);
-        let eventName = file.split(".")[0];
-        // super-secret recipe to call events with all their proper arguments *after* the `client` var.
-        client.on(eventName, (...args) => eventFunction.run(client, ...args));
-    });
+client.on('ready', () => {
+	console.log('Ready!');
 });
 
-client.on("message", message => {
-    if (message.author.bot) return;
-    if (message.content.indexOf(config.prefix) !== 0) return;
-
-    //best way to define args
-    let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-    let command = args.shift().toLowerCase();
-
-    //replace if/else with these lines
-    try {
-        let commandFile = require(`./commands/${command}.js`);
-        commandFile.run(client, message, args);
-    } catch (err) {
-        console.error(err);
-    }
+client.on('message', message => {
+	if(message.content.startsWith(`${prefix}server`)) {
+		message.channel.send(`Server name: ${message.guild.name}\nTotal members: ${message.guild.memberCount}`);
+	}
+	else if(message.content.startsWith(`${prefix}user-info`)) {
+		message.channel.send(`Your username is: ${message.author.username}\nYour ID is: ${message.author.id}`);
+	}
 });
 
-client.login(config.token);
+client.login(token);
