@@ -22,26 +22,20 @@ client.on('message', message => {
 
 	// Get args from user
 	const args = message.content.slice(prefix.length).split(/ +/);
-	const command = args.shift().toLocaleLowerCase();
+	const commandName = args.shift().toLocaleLowerCase();
 	// TODO remove for testing
-	console.log(command);
+	console.log(commandName);
 
-	if(command === 'args-info') {
-		client.commands.get('args-info').execute(message, args);
+	if(!client.commands.has(commandName)) return;
+
+	const command = client.commands.get(commandName);
+
+	try {
+		command.execute(message, args);
 	}
-	else if (command === 'avatar') {
-		client.commands.get('avatar').execute(message);
-	}
-	else if (command === 'ping') {
-		client.commands.get('ping').execute(message);
-	}
-	else if (command === 'prune') {
-		client.commands.get('prune').execute(message, args);
-	}
-	else if (command === 'server') {
-		client.commands.get('server').execute(message);
-	} else if (command === 'user-info') {
-		client.commands.get('user-info').execute(message);
+	catch (error) {
+		console.error(error);
+		message.reply('We\'d an issue opening that command!');
 	}
 
 });
