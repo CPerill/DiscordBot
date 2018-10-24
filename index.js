@@ -18,8 +18,7 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-	console.log(message.author.equals(owner));
-	if(!message.content.startsWith(prefix) || message.author.bot || message.author.equals(owner)) return;
+	if(!message.content.startsWith(prefix) || message.author.bot || message.author.id !== owner) return;
 
 	// Get args from user
 	const args = message.content.slice(prefix.length).split(/ +/);
