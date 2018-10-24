@@ -5,8 +5,10 @@ const { prefix, token, owner } = require('./config.json');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
+/**
+ * Dynamic command reading, handy way to add commands in future
+ */
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 
@@ -23,8 +25,6 @@ client.on('message', message => {
 	// Get args from user
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLocaleLowerCase();
-	// TODO remove for testing
-	console.log(commandName);
 
 	if(!client.commands.has(commandName)) return;
 
