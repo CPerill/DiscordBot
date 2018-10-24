@@ -20,6 +20,7 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
+
 	if(!message.content.startsWith(prefix) || message.author.bot || message.author.id !== owner) return;
 
 	// Get args from user
@@ -29,6 +30,20 @@ client.on('message', message => {
 	if(!client.commands.has(commandName)) return;
 
 	const command = client.commands.get(commandName);
+
+	if(command.guildOnly && message.channel.type !== 'test') {
+		return message.reply('I can\'t execute that command inside a DM!');
+	}
+
+	if(command.args && !args.length) {
+		let reply = `You didn't provide any arguments, ${message.author}`;
+
+		if(command.usage) {
+			reply += `The proper usage would be: '${prefix}${command.name} ${command.usage}'`;
+		}
+
+		return message.channel.send(reply);
+	}
 
 	try {
 		command.execute(message, args);
