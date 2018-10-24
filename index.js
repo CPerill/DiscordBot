@@ -1,6 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefix, token, owner } = require('./config.json');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -18,7 +18,8 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-	if(!message.content.startsWith(prefix) || message.author.bot) return;
+	console.log(message.author.equals(owner));
+	if(!message.content.startsWith(prefix) || message.author.bot || message.author.equals(owner)) return;
 
 	// Get args from user
 	const args = message.content.slice(prefix.length).split(/ +/);
